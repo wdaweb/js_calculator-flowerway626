@@ -1,0 +1,329 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Signika:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <title>calculator</title>
+  <style>
+    /* Color Theme Swatches in Hex 
+    { color: #BF8494; }{ color: rgba(191, 131, 147, 1); }
+    { color: #064973; } { color: rgba(5, 72, 114, 1); }
+    { color: #071A26; }{ color: rgba(6, 26, 38, 1); }
+    { color: #04668C; }{ color: rgba(4, 101, 140, 1); }
+    { color: #04738C; } { color: rgba(4, 115, 140, 1); }
+    */
+
+    /*捲軸寬度 */
+    ::-webkit-scrollbar {
+      width: 8px;
+      margin-right: 2px;
+    }
+
+    /* 捲軸背景 */
+    ::-webkit-scrollbar-track {
+      background: #071A26;
+    }
+
+    /* 捲軸把手 */
+    ::-webkit-scrollbar-thumb {
+      background: gray;
+      border-radius: 1000px;
+    }
+
+    /* 捲軸滑過時 */
+    ::-webkit-scrollbar-thumb:hover {
+      background: #aaa;
+    }
+
+    body {
+      margin: 0;
+      color: #fff;
+      font-family: 'Signika', sans-serif;
+      text-align: center;
+      background: url('https://mir-s3-cdn-cf.behance.net/project_modules/fs/44973e150080465.62f35614b4f7f.jpg') no-repeat center center/100%;
+      background-attachment: fixed;
+    }
+
+    /* 計算機本體 table */
+    #calculator {
+      width: 300px;
+      height: 500px;
+      float: left;
+      padding: 8px;
+      text-align: center;
+      border-radius: 20px;
+      box-sizing: border-box;
+      position: absolute;
+      top: calc(50vh - 235px);
+      left: calc(50vw - 150px);
+      /* 按鍵們的間距 */
+      border-spacing: 8px;
+      background: #071A26;
+      transition: 0.5s;
+      box-shadow: 0 0 10px #aaa;
+    }
+
+    /* 歷史紀錄開合 */
+    #set {
+      font-size: 1.5rem;
+      transition: 0.5s;
+    }
+
+    /* 最新記錄 */
+    #record {
+      height: 30px;
+      text-align: right;
+      font-size: 1.5rem;
+    }
+
+    td {
+      box-sizing: border-box;
+      box-Shadow: 0 0 10px #043553 inset;
+      padding: 10px;
+      font-size: 2rem;
+      border-radius: 8px;
+    }
+
+    td:hover {
+      background: #BF8494;
+      box-Shadow: 0 0 10px #483339 inset;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #record:hover {
+      background: #071A26;
+      box-Shadow: 0 0 10px #043553 inset;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    /* 顯示欄位 */
+    #text {
+      text-align: right;
+      font-size: 2.5rem;
+      background: #000;
+    }
+
+    tr:last-child td:first-child {
+      border-bottom-left-radius: 15px;
+    }
+
+    tr:nth-child(6) td:last-child {
+      border-bottom-right-radius: 15px;
+    }
+
+    tr:nth-child(3),
+    td:nth-child(1n+4) {
+      background: rgba(5, 72, 114);
+    }
+
+    tr:nth-child(1n+4) {
+      background: rgba(4, 101, 140);
+    }
+
+    td:nth-child(1n+4):hover {
+      background: #BF8494;
+    }
+
+    /* 歷史紀錄頁面 div */
+    #recordAll {
+      width: 300px;
+      height: 500px;
+      position: absolute;
+      /* 押在計算機下 */
+      z-index: -1;
+      background: #071A26;
+      list-style: none;
+      text-align: left;
+      float: left;
+      padding: 1rem;
+      border-radius: 20px;
+      box-sizing: border-box;
+      top: calc(50vh - 235px);
+      left: calc(50vw - 150px);
+      transition: 0.5s;
+    }
+
+    /* 紀錄 ul */
+    #recordHistory {
+      padding: 0;
+      margin: 0;
+      width: 270px;
+      height: 400px;
+      /* 紀錄超過高度時出現卷軸 */
+      overflow-y: auto;
+    }
+
+    #recordAll li {
+      padding-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <table id="calculator">
+    <tr>
+      <td id="set"> ≡ </td>
+      <td colspan="4" id="record"> </td>
+    </tr>
+    <tr>
+      <td colspan="4" id="text">0</td>
+    </tr>
+    <tr>
+      <td>C</td>
+      <td>/</td>
+      <td>*</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>8</td>
+      <td>9</td>
+      <td rowspan="2">+</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>5</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+      <td rowspan="2">=</td>
+    </tr>
+    <tr>
+      <td colspan="2">0</td>
+      <td>.</td>
+    </tr>
+  </table>
+  <div id="recordAll">
+    <h3 style="margin:0 0 8px; text-align: center;">● 歷史紀錄 ●</h3>
+    <ul id="recordHistory"></ul>
+  </div>
+
+  <script>
+    // 輸入的數字
+    const text = document.getElementById('text')
+    // 除了 text 以外所有的 td 
+    const btns = document.querySelectorAll('td:not(#text)')
+    // 最新一個紀錄
+    const record = document.getElementById('record')
+    const recordAll = document.getElementById('recordAll')
+    const recordHistory = document.getElementById('recordHistory')
+    const calculator = document.getElementById('calculator')
+    const set = document.getElementById('set')
+    // 開合次數
+    let setNum = 0
+    // 抓 history 的資料防 bug
+    // 進入頁面時，如果localStorage 裡有 history(文字屬性) 則 .parse()轉成陣列，否則給陣列空值
+    const history = localStorage.history ? JSON.parse(localStorage.history) : []
+    // 重新載入時用迴圈把存在 localStorage 的資料(history) 顯示於歷史紀錄
+    for (let i = 0; i < history.length; i++) {
+      recordHistory.insertAdjacentHTML('beforeend', `<li>${history[i]} </li>`)
+    }
+
+    // 當點擊計算機時
+    for (const btn of btns) {
+      btn.onclick = () => {
+        const btnText = btn.innerText
+        if (btnText === '=') {
+          // 清空紀錄
+          record.innerText = ''
+          // 再新增最新的
+          record.insertAdjacentHTML('beforeend', text.innerText)
+          // eval 執行文字裡的算式
+          text.innerText = eval(text.innerText)
+
+          // 將最新的紀錄新增病存放在 history 陣列中
+          history.push(record.innerText + '=' + text.innerText)
+          // 將 history 轉為文字存入 本地儲存 localStorage
+          localStorage.history = JSON.stringify(history)
+          // 用 .slice 找 history 的最後一個值再轉為文字，回傳放在歷史紀錄
+          recordHistory.insertAdjacentHTML('beforeend', `<li>${history.slice(-1).join()}</li>`)
+
+          // 按 C 時清空欄
+        } else if (btnText === 'C') {
+          record.innerText = ''
+          text.innerText = '0'
+        } else {
+          if (text.innerText === '-' && isNaN(parseInt(btnText))) return
+
+          if (text.innerText !== '0') {
+            text.innerText += btnText
+          } else if (!['+', '*', '/'].includes(btnText)) {
+            text.innerText = btnText
+          }
+        }
+      }
+    }
+    // 顯示計算歷史紀錄
+    set.onclick = () => {
+      setNum++
+      if (setNum % 2 !== 0) {
+        recordAll.style.marginLeft = "-150px"
+        calculator.style.marginLeft = "160px"
+        recordAll.style.boxShadow = "0 0 10px #999"
+      } else {
+        recordAll.style.marginLeft = "0px"
+        calculator.style.marginLeft = "0px"
+      }
+    }
+    // 按鍵時
+    document.onkeydown = event => {
+      const btnText = event.key
+      if (btnText === 'Delete') {
+        text.innerText = '0'
+        // 按 Enter 後
+      } else if (btnText === 'Enter' || btnText === '=') {
+        // 最新紀錄先清空前一筆，再顯示新一筆
+        record.innerText = ''
+        record.insertAdjacentHTML('beforeend', text.innerText)
+        // eval 執行文字裡的code
+        text.innerText = eval(text.innerText)
+
+        // 將最新的紀錄新增至 history 陣列中
+        history.push(record.innerText + '=' + text.innerText)
+        // 將 history 轉為文字存入 本地儲存 localStorage
+        localStorage.history = JSON.stringify(history)
+        // 用 .slice 找 history 的最後一個值，回傳放在歷史紀錄
+        recordHistory.insertAdjacentHTML('beforeend', `<li>${history.slice(-1).join()}</li>`)
+
+      } else if (btnText === 'C' || btnText === 'Delete') {
+        text.innerText = '0'
+      } else {
+        if (text.innerText === '-' && isNaN(parseInt(btnText))) return
+
+        // 如果按的鍵 不是 符號跟數字的話return
+        if (!['+', '*', '/', 'C', '=', '-'].includes(btnText) && !btnText.match(/[0-9.]/g)) return
+
+        if (text.innerText !== '0') {
+          text.innerText += btnText
+        } else if (!['+', '*', '/'].includes(btnText)) {
+          text.innerText = btnText
+        }
+      }
+      // 按下時按鈕換顏色
+      for (const btn of btns) {
+        if (event.key === btn.innerText || event.key === 'c') {
+          btn.style.background = "#BF8494"
+          btn.style.boxShadow = "0 0 10px #483339 inset"
+        }
+      }
+    }
+    // 放開時按鈕換回原設定顏色
+    document.onkeyup = event => {
+      for (const btn of btns) {
+        btn.style.background = "none"
+        calculator.style.transition = "0.3s"
+      }
+    }
+  </script>
+</body>
+
+</html>
